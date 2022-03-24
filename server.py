@@ -1,4 +1,3 @@
-from datetime import datetime
 from socket import *
 from threading import Thread
 
@@ -39,16 +38,7 @@ comandos = dict(zip([1, 2, 3, 4, 5, 6], ['cardápio', 'pedir', 'conta individual
 while 1:
     comando, clientAddress = serverSocket.recvfrom(2048)
     if comando.decode() == 'chefia':
-        response = "Digite a mesa"
-        serverSocket.sendto(response.encode(), clientAddress)
-        n_mesa, clientAddress = serverSocket.recvfrom(2048)
-        print('Mesa: ', n_mesa)
-        if len(Mesas) > 0:
-            pedirNome = 'Digite seu nome'
-            serverSocket.sendto(pedirNome.encode(), clientAddress)
-            nome, clientAddress = serverSocket.recvfrom(2048)
-            cliente = Cliente(nome, n_mesa, clientAddress)
-            Clientes.append(cliente)
+        #criar thread para cada cliente
 
 
 
