@@ -1,5 +1,4 @@
 from socket import *
-from threading import *
 
 
 class Cliente:
@@ -28,7 +27,7 @@ class Mesa:
         self.total = 0
 
     def getvalues(self):
-        return self.numero, self.clientes, self.total
+        return self.numero
 
 
 serverPort = 12000
@@ -36,7 +35,6 @@ serverSocket = socket(AF_INET, SOCK_DGRAM)
 serverSocket.bind(('', serverPort))
 Mesas = []
 comandos = ['Digite uma das opções','1 - cardápio', '2 - pedir', '3 - conta individual', '4 - pagar', '5 - levantar', '6 - conta da mesa']
-# response = {1:'Digite sua mesa', 2:'Digite seu nome', 3:'Digite uma opção', 4:'Digite qual o item que gostaria', 5:}
 while 1:
     comando, clientAddress = serverSocket.recvfrom(2048)
     if comando.decode() == 'chefia':
@@ -57,10 +55,4 @@ while 1:
                     novaMesa = Mesa(n_mesa)
                     novaMesa.clientes.append(cliente)
                     Mesas.append(novaMesa)
-            # fim da adição de um novo cliente
-    ##elif comando.decode() == 'cardapio':
-    for i in len(comandos):
-        serverSocket.sendall(comandos[i].encode(), clientAddress)
 
-
-# serverSocket.sendto(response.encode(), clientAddress)
