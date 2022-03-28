@@ -65,6 +65,7 @@ while 1:
         check = str(checksum(message)).encode()
 
     serverSocket.sendto(ok.encode(), checkaddress)
+
     message, clientAddress = serverSocket.recvfrom(bufferSize)
     while message.decode() != 'conta da mesa':
         print(message.decode())

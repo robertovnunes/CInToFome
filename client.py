@@ -31,8 +31,7 @@ while cmd != 'conta da mesa':
         response, serverAddress = clientSocket.recvfrom(bufferSize)
         checkedResponse = clientSocket.recvfrom(bufferSize)
 
-    if response.decode() == 'ok':
-        clientSocket.sendto(comando, (serverName, serverPort))
+    clientSocket.sendto(comando, (serverName, serverPort))
     print(f'{apresentacao} CInToFome:', response.decode())
 
 
