@@ -91,6 +91,13 @@
       <workItem from="1648151621981" duration="273000" />
       <workItem from="1648397276269" duration="683000" />
       <workItem from="1648413800424" duration="5631000" />
+      <workItem from="1648502516573" duration="2280000" />
+      <workItem from="1649522249305" duration="1084000" />
+      <workItem from="1649523512629" duration="4979000" />
+      <workItem from="1649533206511" duration="1359000" />
+      <workItem from="1649559422988" duration="63000" />
+      <workItem from="1649604587215" duration="596000" />
+      <workItem from="1649683607619" duration="2274000" />
     </task>
     <servers />
   </component>
@@ -110,8 +117,8 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/CInToFome$UDPclient.coverage" NAME="UDPclient Coverage Results" MODIFIED="1648428801811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/projeto_gab/rascunho/teste4" />
-    <SUITE FILE_PATH="coverage/CInToFome$server.coverage" NAME="server Coverage Results" MODIFIED="1648428628685" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CInToFome$server.coverage" NAME="server Coverage Results" MODIFIED="1649535559728" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CInToFome$UDPserver.coverage" NAME="UDPserver Coverage Results" MODIFIED="1648428799202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/projeto_gab/rascunho/teste4" />
-    <SUITE FILE_PATH="coverage/CInToFome$client.coverage" NAME="client Coverage Results" MODIFIED="1648428631930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CInToFome$client.coverage" NAME="client Coverage Results" MODIFIED="1649535562177" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

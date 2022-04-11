@@ -1,13 +1,19 @@
+from struct import *
 from datetime import datetime
 from socket import *
 
-def checksum(stri) :
-    a=0
-    stri = str(stri)
-    for c in stri:
-       a += ord(c)
+def carry_around_add(a, b):
+    c = a + b
+    return (c & 0xffff) + (c >> 16)
 
-    return a%2
+
+def checksum(msg):
+    s = 0
+    for i in range(0, len(msg)-2, 2):
+        w = ord(msg[i]) + (ord(msg[i + 1]) << 8)
+        s = carry_around_add(s, w)
+    return ~s & 0xffff
+
 
 
 serverName = 'localhost'
@@ -16,23 +22,24 @@ bufferSize = 1024
 clientSocket = socket(AF_INET, SOCK_DGRAM)
 cmd = ''
 
-while cmd != 'conta da mesa':
+while cmd != 'sair':
     apresentacao = f'{datetime.now().hour}:{datetime.now().minute}'
     cmd = input(f'{apresentacao} Cliente:')
-    comando = str.encode(cmd)
+    checkSum = checksum(cmd)
+    data_len = len(cmd)
+    udp_header = pack("!III", serverPort, data_len, checkSum)
+    comando = udp_header + cmd.encode()
     clientSocket.sendto(comando, (serverName, serverPort))
-    clientSocket.sendto(str.encode(str(checksum(comando))), (serverName, serverPort))
+
+    #recebe do servidor
     response, serverAddress = clientSocket.recvfrom(bufferSize)
-    ok = 'ok'
-
-    while response.decode() != 'ok':
-        clientSocket.sendto(comando, (serverName, serverPort))
-        clientSocket.sendto(str.encode(str(checksum(comando))), (serverName, serverPort))
-        response, serverAddress = clientSocket.recvfrom(bufferSize)
-        checkedResponse = clientSocket.recvfrom(bufferSize)
-
-    clientSocket.sendto(comando, (serverName, serverPort))
-    print(f'{apresentacao} CInToFome:', response.decode())
+    udp_header = response[:12]
+    data = response[12:]
+    udp_header = unpack('!III', udp_header)
+    correct_checksum = udp_header[2]
+    checkSumR = checksum(data.decode())
+    if correct_checksum == checkSumR:
+        print(f'{apresentacao} Servidor:', data.decode())
 
 
 clientSocket.close()
