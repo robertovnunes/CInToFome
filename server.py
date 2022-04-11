@@ -12,14 +12,10 @@ comando = ''
 
 while comando != 'sair':
     message, clientAddress = serverSocket.recvfrom(bufferSize)
-    udp_header = message[:12]
-    data = message[12:]
-    udp_header = unpack("!III", udp_header)
-    correct_checksum = udp_header[2]
-    checkSum = checksum(data.decode())
-    if correct_checksum == checkSum:
-        comando = data.decode()
-        print(comando)
-        serverSocket.sendto(b'1', clientAddress)
+    ack, nextack, comando = udpextract(message)
+    if ack == nextack:
+          pacote = createpkt(comando, ack, clientAddress[1])
+          serverSocket.sendto(pacote, clientAddress)
     else:
-        serverSocket.sendto(b'0', clientAddress)
+        pacote = createpkt(comando, nextack, clientAddress[1])
+        serverSocket.sendto(pacote, clientAddress)

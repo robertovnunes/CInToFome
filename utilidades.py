@@ -14,18 +14,26 @@ def checksum(msg):
     return ~s & 0xffff
 
 
-def createpkt(msg, port):
+def createpkt(msg, sequencia, port):
     checkSum = checksum(msg)
     data_len = len(msg)
     udp_header = pack("!III", port, data_len, checkSum)
-    pkt = udp_header + msg.encode()
+    if sequencia % 2 == 0:
+        pkt = b'0' + udp_header + msg.encode()
+    else:
+        pkt = b'1' + udp_header + msg.encode()
     return pkt
 
-#def udpextract(pacote):
-#    udp_header = pacote[:12]
-#    data = pacote[12:]
-#    udp_header = unpack('!III', udp_header)
-#    correct_checksum = udp_header[2]
-#    correct_checksum = int(correct_checksum)
-#    checksumr = checksum(data.decode())
-#    return data.decode()
+
+def udpextract(pacote):
+    ack = pacote[0]
+    udp_header = pacote[1:13]
+    data = pacote[13:]
+    udp_header = unpack('!III', udp_header)
+    correct_checksum = udp_header[2]
+    checksumr = checksum(data.decode())
+    if correct_checksum == checksumr:
+        return ack, ack+1, data.decode()
+    else:
+        return ack, ack, ''
+
