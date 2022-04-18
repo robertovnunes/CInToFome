@@ -20,7 +20,7 @@ file_name = file_name.split('/')
 #    pacote = createpkt('', ack, clientAddress[1])
 #    serverSocket.sendto(pacote, clientAddress)
 
-print(f"nome do arquivo recebido {file_name}")
+print(f"nome do arquivo recebido {file_name[1]}")
 #recebendo quantidade de pacotes
 
 data = serverSocket.recv(4)
@@ -38,7 +38,7 @@ start = time.time()
 for i in range(numero_de_pacotes):
     data = serverSocket.recv(pacote_em_bytes+14)
     ack, nextack, dado = udpextract(data)
-    while ack == nextack or received(data):
+    while ack == nextack or time.time()-start == serverSocket.gettimeout() or dado == '':
         serverSocket.sendto(ack, clientAddress)
         data = serverSocket.recv(pacote_em_bytes+14)
         ack, nextack, dado = udpextract(data)

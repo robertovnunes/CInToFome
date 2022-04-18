@@ -38,9 +38,11 @@ for i in range(numero_de_pacotes):
     dado = file.read(pacote_em_bytes)
     pacote = createpkt(dado, i, serverPort)
     clientSocket.sendto(pacote, (serverName, serverPort))
+    start = time.time()
     ackResponse = clientSocket.recv(4)
-    while ackResponse == (i % 2):
+    while ackResponse == (i % 2) or time.time()-start == clientSocket.gettimeout():
         clientSocket.sendto(pacote, (serverName, serverPort))
+        ackResponse = clientSocket.recv(4)
 
     enviado = f"{int((i+1)*pacote_em_kilobytes)}/{int(pacote_em_kilobytes*numero_de_pacotes)}Kb"
     print('\r'+enviado, end='')
