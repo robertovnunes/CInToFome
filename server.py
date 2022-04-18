@@ -20,8 +20,9 @@ file_name = file_name.split('/')
 #    pacote = createpkt('', ack, clientAddress[1])
 #    serverSocket.sendto(pacote, clientAddress)
 
-print("nome do arquivo recebido")
+print(f"nome do arquivo recebido {file_name}")
 #recebendo quantidade de pacotes
+
 data = serverSocket.recv(4)
 numero_de_pacotes = int.from_bytes(data, "little")
 
@@ -37,6 +38,12 @@ start = time.time()
 for i in range(numero_de_pacotes):
     data = serverSocket.recv(pacote_em_bytes+14)
     ack, nextack, dado = udpextract(data)
+    while ack == nextack or received(data):
+        serverSocket.sendto(ack, clientAddress)
+        data = serverSocket.recv(pacote_em_bytes+14)
+        ack, nextack, dado = udpextract(data)
+    file.write(dado.encode())
+    serverSocket.sendto(nextack.to_bytes(4, "little"), clientAddress)
 
     porcentagem = f"Baixando... {round((100*(i+1))/numero_de_pacotes, 2)}%"
     # print(porcentagem)

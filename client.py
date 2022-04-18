@@ -28,7 +28,7 @@ pacote_em_kilobytes = 512
 pacote_em_bytes = pacote_em_kilobytes * 8
 
 #enviando numero de pacotes
-numero_de_pacotes = (file_size // pacote_em_bytes) + 14
+numero_de_pacotes = (file_size // pacote_em_bytes)
 clientSocket.sendto(numero_de_pacotes.to_bytes(4, "little"), (serverName, serverPort))
 
 delay = 0.004
@@ -38,6 +38,10 @@ for i in range(numero_de_pacotes):
     dado = file.read(pacote_em_bytes)
     pacote = createpkt(dado, i, serverPort)
     clientSocket.sendto(pacote, (serverName, serverPort))
+    ackResponse = clientSocket.recv(4)
+    while ackResponse == (i % 2):
+        clientSocket.sendto(pacote, (serverName, serverPort))
+
     enviado = f"{int((i+1)*pacote_em_kilobytes)}/{int(pacote_em_kilobytes*numero_de_pacotes)}Kb"
     print('\r'+enviado, end='')
     time.sleep(delay)
