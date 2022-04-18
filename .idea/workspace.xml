@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="362bb1b3-0ebd-4964-8ea8-63be44816c8e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/client.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utilidades.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilidades.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,10 +39,9 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../ProjInfraCom" />
   </component>
   <component name="RunManager" selected="Python.client">
     <configuration name="client" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -138,6 +137,16 @@
       <workItem from="1649604587215" duration="596000" />
       <workItem from="1649683607619" duration="2274000" />
       <workItem from="1649694730472" duration="11236000" />
+      <workItem from="1649857749988" duration="704000" />
+      <workItem from="1649900039067" duration="579000" />
+      <workItem from="1649945563813" duration="579000" />
+      <workItem from="1649999074586" duration="1587000" />
+      <workItem from="1650034415125" duration="308000" />
+      <workItem from="1650042934122" duration="591000" />
+      <workItem from="1650055693287" duration="1839000" />
+      <workItem from="1650209345811" duration="1840000" />
+      <workItem from="1650291338655" duration="6617000" />
+      <workItem from="1650302278024" duration="191000" />
     </task>
     <servers />
   </component>
@@ -168,9 +177,9 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/CInToFome$UDPclient.coverage" NAME="UDPclient Coverage Results" MODIFIED="1648428801811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/projeto_gab/rascunho/teste4" />
-    <SUITE FILE_PATH="coverage/CInToFome$server.coverage" NAME="server Coverage Results" MODIFIED="1649701898098" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CInToFome$server.coverage" NAME="server Coverage Results" MODIFIED="1650299635569" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CInToFome$utilidades.coverage" NAME="utilidades Coverage Results" MODIFIED="1649696238909" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CInToFome$UDPserver.coverage" NAME="UDPserver Coverage Results" MODIFIED="1648428799202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/projeto_gab/rascunho/teste4" />
-    <SUITE FILE_PATH="coverage/CInToFome$client.coverage" NAME="client Coverage Results" MODIFIED="1649701900879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CInToFome$client.coverage" NAME="client Coverage Results" MODIFIED="1650299637844" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
