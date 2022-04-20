@@ -20,8 +20,20 @@ path = './arquivo.txt'
 file = open(path, 'r')
 
 #enviando nome do arquivo ao servidor
+namepkt = createpkt(path, 0, serverPort)
+clientSocket.sendto(namepkt, (serverName, serverPort))
+start = time.time()
+ackResponse = clientSocket.recv(18)
+ack, nextack, ackdata = udpextract(ackResponse)
+while (ack == nextack or time.time()-start == clientSocket.gettimeout()) and not received(ackResponse):
+    if time.time()-start == clientSocket.gettimeout()-1:
+        start = time.time()
+        clientSocket.sendto(namepkt, (serverName, serverPort))
+    elif ackResponse == 0 or ackdata == '':
+        clientSocket.sendto(namepkt, (serverName, serverPort))
+    ackResponse = clientSocket.recv(18)
+    ackData, nextack, ackdata = udpextract(ackResponse)
 
-clientSocket.sendto(createpkt(path, 0, serverPort), (serverName, serverPort))
 
 file_size = os.path.getsize(path)  # Size in bits
 pacote_em_kilobytes = 512
@@ -39,10 +51,16 @@ for i in range(numero_de_pacotes):
     pacote = createpkt(dado, i, serverPort)
     clientSocket.sendto(pacote, (serverName, serverPort))
     start = time.time()
-    ackResponse = clientSocket.recv(4)
-    while ackResponse == (i % 2) or time.time()-start == clientSocket.gettimeout():
-        clientSocket.sendto(pacote, (serverName, serverPort))
-        ackResponse = clientSocket.recv(4)
+    ackResponse = clientSocket.recv(18)
+    ack, nextack, ackdata = udpextract(ackResponse)
+    while (ack == nextack or time.time() - start == clientSocket.gettimeout()) and not received(ackResponse):
+        if time.time() - start == clientSocket.gettimeout() - 1:
+            start = time.time()
+            clientSocket.sendto(namepkt, (serverName, serverPort))
+        elif ackResponse == 0 or ackResponse.decode() == '':
+            clientSocket.sendto(namepkt, (serverName, serverPort))
+        ackResponse = clientSocket.recv(18)
+        ack, nextack, ackdata = udpextract(ackResponse)
 
     enviado = f"{int((i+1)*pacote_em_kilobytes)}/{int(pacote_em_kilobytes*numero_de_pacotes)}Kb"
     print('\r'+enviado, end='')

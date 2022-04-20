@@ -33,7 +33,7 @@ def udpextract(pacote):
     correct_checksum = udp_header[2]
     checksumr = checksum(data.decode())
     if correct_checksum == checksumr:
-        return ack, (ack+1)%2, data.decode()
+        return ack, (ack+1) % 2, data.decode()
     else:
         return ack, ack, ''
 

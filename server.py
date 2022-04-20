@@ -14,16 +14,21 @@ serverSocket.settimeout(10.0)
 #recebendo nome do arquivo
 print("aguardando nome do arquivo a ser enviado")
 data, clientAddress = serverSocket.recvfrom(512)
-file_name = udpextract(data)[2]
+timer = time.time()
+ack, nextack, file_name = udpextract(data)
 file_name = file_name.split('/')
-#while ack == nextack:
-#    pacote = createpkt('', ack, clientAddress[1])
-#    serverSocket.sendto(pacote, clientAddress)
+while (ack == nextack or time.time() - timer == serverSocket.gettimeout()) and not received(data):
+    if time.time() - timer == serverSocket.gettimeout() - 1:
+        serverSocket.sendto(ack, clientAddress)
+        data = serverSocket.recv(512)
+        ack, nextack, dado = udpextract(data)
+nextpkt = createpkt('.', nextack, clientAddress[1])
+serverSocket.sendto(nextpkt, clientAddress)
 
 print(f"nome do arquivo recebido {file_name[1]}")
 #recebendo quantidade de pacotes
 
-data = serverSocket.recv(4)
+data = serverSocket.recv(18)
 numero_de_pacotes = int.from_bytes(data, "little")
 
 comando = ''
@@ -36,14 +41,17 @@ pacote_em_bytes = pacote_em_kilobytes * 8
 print(f"Recebendo {numero_de_pacotes} pacotes...")
 start = time.time()
 for i in range(numero_de_pacotes):
+    timer = time.time()
     data = serverSocket.recv(pacote_em_bytes+14)
     ack, nextack, dado = udpextract(data)
-    while ack == nextack or time.time()-start == serverSocket.gettimeout() or dado == '':
-        serverSocket.sendto(ack, clientAddress)
-        data = serverSocket.recv(pacote_em_bytes+14)
-        ack, nextack, dado = udpextract(data)
+    while (ack == nextack or time.time()-timer == serverSocket.gettimeout()) and not received(data):
+        if time.time()-timer == serverSocket.gettimeout()-1:
+            serverSocket.sendto(ack, clientAddress)
+            data = serverSocket.recv(pacote_em_bytes+14)
+            ack, nextack, dado = udpextract(data)
     file.write(dado.encode())
-    serverSocket.sendto(nextack.to_bytes(4, "little"), clientAddress)
+    nextpkt = createpkt('.', nextack, clientAddress[1])
+    serverSocket.sendto(nextpkt, clientAddress)
 
     porcentagem = f"Baixando... {round((100*(i+1))/numero_de_pacotes, 2)}%"
     # print(porcentagem)
