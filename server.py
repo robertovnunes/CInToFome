@@ -18,10 +18,16 @@ timer = time.time()
 ack, nextack, file_name = udpextract(data)
 file_name = file_name.split('/')
 while (ack == nextack or time.time() - timer == serverSocket.gettimeout()) and not received(data):
+    ackpkt = createpkt('.', ack, clientAddress[1])
     if time.time() - timer == serverSocket.gettimeout() - 1:
+        serverSocket.settimeout(10.0)
         serverSocket.sendto(ack, clientAddress)
         data = serverSocket.recv(512)
-        ack, nextack, dado = udpextract(data)
+        ack, nextack, file_name = udpextract(data)
+    elif ack == nextack:
+        serverSocket.sendto(ackpkt, clientAddress)
+    data = serverSocket.recv(18)
+    ack, nextack, file_name = udpextract(data)
 nextpkt = createpkt('.', nextack, clientAddress[1])
 serverSocket.sendto(nextpkt, clientAddress)
 
@@ -29,26 +35,45 @@ print(f"nome do arquivo recebido {file_name[1]}")
 #recebendo quantidade de pacotes
 
 data = serverSocket.recv(18)
-numero_de_pacotes = int.from_bytes(data, "little")
+timer = time.time()
+ack, nextack, numero_de_pacotes = udpintextract(data)
+while (ack == nextack or time.time()-timer == serverSocket.gettimeout()) and not received(data):
+    ackpkt = createpkt('.', ack, clientAddress[1])
+    if time.time()-timer == serverSocket.gettimeout()-1:
+        timer = time.time()
+        serverSocket.settimeout(10.0)
+        serverSocket.sendto(ackpkt, clientAddress)
+    elif ack == nextack:
+        serverSocket.sendto(ackpkt, clientAddress)
+    data = serverSocket.recv(18)
+    ack, nextack, numero_de_pacotes = udpintextract(data)
 
+nextpkt = createpkt('.', nextack, clientAddress[1])
+serverSocket.sendto(nextpkt, clientAddress)
 comando = ''
 
-serverSocket.settimeout(5.0)
+serverSocket.settimeout(10.0)
 file = open(f'./recebido/{file_name[1]}', "wb")
 pacote_em_kilobytes = 512
 pacote_em_bytes = pacote_em_kilobytes * 8
 
 print(f"Recebendo {numero_de_pacotes} pacotes...")
+
 start = time.time()
 for i in range(numero_de_pacotes):
     timer = time.time()
     data = serverSocket.recv(pacote_em_bytes+14)
     ack, nextack, dado = udpextract(data)
     while (ack == nextack or time.time()-timer == serverSocket.gettimeout()) and not received(data):
+        ackpkt = createpkt('.', ack, clientAddress[1])
         if time.time()-timer == serverSocket.gettimeout()-1:
-            serverSocket.sendto(ack, clientAddress)
-            data = serverSocket.recv(pacote_em_bytes+14)
-            ack, nextack, dado = udpextract(data)
+            timer = time.time()
+            serverSocket.settimeout(10.0)
+            serverSocket.sendto(ackpkt, clientAddress)
+        elif ack == nextack:
+            serverSocket.sendto(ackpkt, clientAddress)
+        data = serverSocket.recv(pacote_em_bytes+14)
+        ack, nextack, dado = udpextract(data)
     file.write(dado.encode())
     nextpkt = createpkt('.', nextack, clientAddress[1])
     serverSocket.sendto(nextpkt, clientAddress)

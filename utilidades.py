@@ -15,13 +15,20 @@ def checksum(msg):
 
 
 def createpkt(msg, sequencia, port):
-    checkSum = checksum(msg)
-    data_len = len(msg)
-    udp_header = pack("!III", port, data_len, checkSum)
-    if sequencia % 2 == 0:
-        pkt = b'0' + udp_header + msg.encode()
-    else:
-        pkt = b'1' + udp_header + msg.encode()
+    if isinstance(msg, str):
+        checkSum = checksum(msg)
+        data_len = len(msg)
+        udp_header = pack("!III", port, data_len, checkSum)
+        if sequencia % 2 == 0:
+            pkt = b'0' + udp_header + msg.encode()
+        else:
+            pkt = b'1' + udp_header + msg.encode()
+    elif isinstance(msg, int):
+        udp_header = pack("!III", port, 4, 0)
+        if sequencia % 2 == 0:
+            pkt = b'0' + udp_header + msg.to_bytes(4, "little")
+        else:
+            pkt = b'1' + udp_header + msg.to_bytes(4, "little")
     return pkt
 
 
@@ -34,6 +41,18 @@ def udpextract(pacote):
     checksumr = checksum(data.decode())
     if correct_checksum == checksumr:
         return ack, (ack+1) % 2, data.decode()
+    else:
+        return ack, ack, ''
+
+def udpintextract(pacote):
+    ack = pacote[0]
+    udp_header = pacote[1:13]
+    data = pacote[13:]
+    udp_header = unpack('!III', udp_header)
+    correct_checksum = udp_header[2]
+    checksumr = 0
+    if correct_checksum == checksumr:
+        return ack, (ack+1) % 2, int.from_bytes(data, "little")
     else:
         return ack, ack, ''
 
