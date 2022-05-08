@@ -15,90 +15,78 @@ bufferSize = 1024
 clientSocket = socket(AF_INET, SOCK_DGRAM)
 clientSocket.connect((serverName, serverPort))
 clientSocket.settimeout(10.0)
-path = './arquivo.txt'
 
-#abre, em modo de leitura de byte, o arquivo a ser enviado
-file = open(path, 'r')
-
-#enviando nome do arquivo ao servidor
-namepkt = createpkt(path, 0, serverPort)
-clientSocket.sendto(namepkt, serverAddress)
-start = time.time()
-ackResponse = clientSocket.recv(18)
-ack, nextack, ackdata = udpextract(ackResponse)
-while (ack == nextack or time.time()-start == clientSocket.gettimeout()) and not received(ackResponse):
-    if time.time()-start == clientSocket.gettimeout()-1:
-        start = time.time()
-        clientSocket.sendto(namepkt, serverAddress)
-    elif ackResponse == 0:
-        clientSocket.sendto(namepkt, serverAddress)
-    ackResponse = clientSocket.recv(18)
-    ackData, nextack, ackdata = udpextract(ackResponse)
-
-
-file_size = os.path.getsize(path)  # Size in bits
-pacote_em_kilobytes = 512
-pacote_em_bytes = pacote_em_kilobytes * 8
-
-#enviando numero de pacotes
-numero_de_pacotes = (file_size // pacote_em_bytes)
-npck = createpkt(numero_de_pacotes, 0, serverPort)
-clientSocket.sendto(npck, serverAddress)
-start = time.time()
-ackResponse = clientSocket.recv(18)
-ack, nextack, ackdata = udpextract(ackResponse)
-while (ack == nextack or time.time()-start == clientSocket.gettimeout()) and not received(ackResponse):
-    if time.time()-start == clientSocket.gettimeout()-1:
-        start = time.time()
-        clientSocket.sendto(namepkt, serverAddress)
-    elif ackResponse == 0:
-        clientSocket.sendto(namepkt, serverAddress)
-    ackResponse = clientSocket.recv(18)
-    ackData, nextack, ackdata = udpextract(ackResponse)
-
-delay = 0.004
-tempo_estimado = numero_de_pacotes*(delay*1.2)
-
-for i in range(numero_de_pacotes):
-    dado = file.read(pacote_em_bytes)
-    pacote = createpkt(dado, i, serverPort)
-    clientSocket.sendto(pacote, serverAddress)
-    start = time.time()
-    ackResponse = clientSocket.recv(18)
-    ack, nextack, ackdata = udpextract(ackResponse)
-    while (ack == nextack or time.time() - start == clientSocket.gettimeout()) and not received(ackResponse):
-        if time.time() - start == clientSocket.gettimeout() - 1:
-            clientSocket.settimeout(10.0)
-            start = time.time()
-            clientSocket.sendto(namepkt, serverAddress)
-        elif ackResponse == 0:
-            clientSocket.sendto(namepkt, serverAddress)
-        ackResponse = clientSocket.recv(18)
-        ack, nextack, ackdata = udpextract(ackResponse)
-
-    enviado = f"{int((i+1)*pacote_em_kilobytes)}/{int(pacote_em_kilobytes*numero_de_pacotes)}Kb"
-    print('\r'+enviado, end='')
-    time.sleep(delay)
-
-clientSocket.close()
-file.close()
-
-'''
 cmd = ''
 seq = 0
 while cmd != 'sair':
     apresentacao = f'{datetime.now().hour}:{datetime.now().minute}'
+
+    #le comando e envia para o servidor
     cmd = input(f'{apresentacao} Cliente:')
-    comando = createpkt(cmd, seq, serverPort)
-    clientSocket.sendto(comando, (serverName, serverPort))
-    ack, nextack, receive = udpextract(clientSocket.recvfrom(bufferSize)[0])
-    print(receive)
-    #recebe do servidor
+    comandopkt = createpkt(cmd, seq, serverPort)
+    clientSocket.sendto(comandopkt, serverAddress)
+    #inicio rdt3.0 transmissor
+    start = time.time()
+    if time.time() - start == clientSocket.gettimeout() - 1:
+        clientSocket.settimeout(10.0)
+        start = time.time()
+        clientSocket.sendto(comandopkt, serverAddress)
+    #se o comando for a conta da mesa ou conta individual, o servidor envia dois inteiros e os concatena
+    if cmd == 'conta da mesa' or cmd == 'conta individual':
+        #recebendo parte inteira da conta
+        dataint = clientSocket.recv(18)
+        timer = time.time()
+        ack, nextack, intfloat = udpintextract(dataint)
+        # inicio rdt3.0 receptor
+        while (ack == nextack or time.time()-timer == clientSocket.gettimeout()) and not received(dataint):
+            ackpkt = createpkt('.', ack, serverPort)
+            if time.time()-timer == clientSocket.gettimeout()-1:
+                timer = time.time()
+                clientSocket.settimeout(10.0)
+                clientSocket.sendto(ackpkt, serverAddress)
+            elif ack == nextack:
+                clientSocket.sendto(ackpkt, serverAddress)
+            dataint = clientSocket.recv(18)
+            ack, nextack, intfloat= udpintextract(dataint)
 
-    while ack == nextack:
-        clientSocket.sendto(comando, (serverName, serverPort))
+        #recebendo parte decimal da conta
+        datadec = clientSocket.recv(18)
+        timer = time.time()
+        ack, nextack, decfloat = udpintextract(datadec)
+        # inicio rdt3.0 receptor
+        while (ack == nextack or time.time() - timer == clientSocket.gettimeout()) and not received(datadec):
+            ackpkt = createpkt('.', ack, serverPort)
+            if time.time() - timer == clientSocket.gettimeout() - 1:
+                timer = time.time()
+                clientSocket.settimeout(10.0)
+                clientSocket.sendto(ackpkt, serverAddress)
+            elif ack == nextack:
+                clientSocket.sendto(ackpkt, serverAddress)
+            datadec = clientSocket.recv(18)
+            ack, nextack, decfloat = udpintextract(datadec)
+        #fim rdt3.0
+        print(f'{apresentacao} servidor: R${intfloat},{decfloat}')
+
+    #se for qualquer outro comando, só imprime
+    else:
+        start = time.time()
+        if time.time() - start == clientSocket.gettimeout() - 1:
+            clientSocket.settimeout(10.0)
+            start = time.time()
+            ackpkt = createpkt('.', int(ack), serverPort)
+            clientSocket.sendto(ackpkt, serverAddress)
+        data = clientSocket.recvfrom(512)[0]
+        # inicio rdt3.0 receptor
+        ack, nextack, dataResponse = udpextract(data)
+        if ack == nextack:
+            ackpkt = createpkt('.', int(ack), serverPort)
+            clientSocket.sendto(ackpkt, serverAddress)
+            data = clientSocket.recv(512)
+            ack, nextack, comando = udpextract(data)
+        #fim rdt3.0 receptor
+        print(f'{apresentacao} servidor: {dataResponse}')
     seq = seq + 1
-
+    #nxtack = createpkt('.', nextack, serverPort)
+    #clientSocket.sendto(nxtack, serverAddress)
 
 clientSocket.close()
-'''

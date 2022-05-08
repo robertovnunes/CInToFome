@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="362bb1b3-0ebd-4964-8ea8-63be44816c8e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utilidades.py" beforeDir="false" afterPath="$PROJECT_DIR$/utilidades.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,6 +154,11 @@
       <workItem from="1650556377809" duration="1438000" />
       <workItem from="1650558271200" duration="1092000" />
       <workItem from="1650646393788" duration="584000" />
+      <workItem from="1652029639185" duration="428000" />
+      <workItem from="1652032149147" duration="333000" />
+      <workItem from="1652033125407" duration="8202000" />
+      <workItem from="1652042564058" duration="5453000" />
+      <workItem from="1652050418867" duration="2344000" />
     </task>
     <servers />
   </component>
@@ -181,9 +189,9 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/CInToFome$UDPclient.coverage" NAME="UDPclient Coverage Results" MODIFIED="1648428801811" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/projeto_gab/rascunho/teste4" />
-    <SUITE FILE_PATH="coverage/CInToFome$client.coverage" NAME="client Coverage Results" MODIFIED="1650559370982" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CInToFome$client.coverage" NAME="client Coverage Results" MODIFIED="1652052589149" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CInToFome$utilidades.coverage" NAME="utilidades Coverage Results" MODIFIED="1649696238909" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/CInToFome$UDPserver.coverage" NAME="UDPserver Coverage Results" MODIFIED="1648428799202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/projeto_gab/rascunho/teste4" />
-    <SUITE FILE_PATH="coverage/CInToFome$server.coverage" NAME="server Coverage Results" MODIFIED="1650559369373" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CInToFome$server.coverage" NAME="server Coverage Results" MODIFIED="1652052586758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
