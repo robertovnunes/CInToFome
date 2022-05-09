@@ -4,6 +4,7 @@ from urllib3 import Timeout
 from utilidades import *
 import pickle
 import time
+from datetime import datetime
 
 serverName = 'localhost'
 serverPort = 12000
@@ -14,10 +15,12 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)
 
 
 # messages = ["Hello!", "My name is HR", "How's going?"]
-appMessage = "Insira uma mensagem: "
+agora = datetime.now().strftime('%H:%M')
+appMessage = f"{agora} CINtoFome:Bem vindo ao CintoFome!\n:"
 while True:
     message = input(appMessage)
-    # print(f"enviando \'{message}\'")
+    agora = datetime.now().strftime('%H:%M')
+    print (f"{agora} Clientee:{message}")
     pkt = createPkt(message, nextAck)
     
     clientSocket.sendto(pkt, (serverName, serverPort))
@@ -27,7 +30,9 @@ while True:
     reqRes = pickle.loads(reqRes)
     replyPkt, isOK = checkPkt(reqRes)
     clientSocket.sendto(replyPkt, serverAddress)
-    if (isOK): 
-        appMessage = reqRes["msg"]
+    if (isOK):
+        agora = datetime.now().strftime('%H:%M')
+        msgServer = reqRes["msg"] 
+        appMessage = f"{agora} CINtoFome: {msgServer}"
 
 clientSocket.close()
