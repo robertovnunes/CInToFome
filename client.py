@@ -17,7 +17,7 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)
 appMessage = "Insira uma mensagem: "
 while True:
     message = input(appMessage)
-    print(f"enviando \'{message}\'")
+    # print(f"enviando \'{message}\'")
     pkt = createPkt(message, nextAck)
     
     clientSocket.sendto(pkt, (serverName, serverPort))

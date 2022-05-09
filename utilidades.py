@@ -41,10 +41,10 @@ def udpextract(pacote):
     correct_checksum = udp_header[2]
     checksumr = checksum(data.decode())
     if correct_checksum == checksumr:
-        print("Checksum OK!")
+        # print("Checksum OK!")
         return ack, (ack+1) % 2, data.decode()
     else:
-        print("Checksum ERROR!")
+        # print("Checksum ERROR!")
         return ack, ack, ''
 
 
@@ -95,11 +95,11 @@ def waitConfirmation(socket, nextAck):
     times = 1
     
     while True:
-        print("Esperando confimação...")
+        # print("Esperando confimação...")
         try:
             reply, senderAddress = socket.recvfrom(2048)
             reply = pickle.loads(reply)
-            print(reply)
+            # print(reply)
             if reply["head"]["ack"] == nextAck:
                 if nextAck == 0:
                     nextAck = 1
