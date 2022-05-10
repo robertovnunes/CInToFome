@@ -22,7 +22,7 @@ while cmd != 'sair':
     apresentacao = f'{datetime.now().hour}:{datetime.now().minute}'
 
     #le comando e envia para o servidor
-    cmd = input(f'{apresentacao} Cliente:')
+    cmd = input(f'{apresentacao} Cliente: ')
     comandopkt = createpkt(cmd, seq, serverPort)
     clientSocket.sendto(comandopkt, serverAddress)
     #inicio rdt3.0 transmissor
@@ -73,20 +73,70 @@ while cmd != 'sair':
         if time.time() - start == clientSocket.gettimeout() - 1:
             clientSocket.settimeout(10.0)
             start = time.time()
-            ackpkt = createpkt('.', int(ack), serverPort)
+            ackpkt = createpkt('.', ack, serverPort)
             clientSocket.sendto(ackpkt, serverAddress)
-        data = clientSocket.recvfrom(512)[0]
+        data = clientSocket.recvfrom(512)
         # inicio rdt3.0 receptor
-        ack, nextack, dataResponse = udpextract(data)
+        ack, nextack, dataResponse = udpextract(data[0])
         if ack == nextack:
-            ackpkt = createpkt('.', int(ack), serverPort)
+            ackpkt = createpkt('.', ack, serverPort)
             clientSocket.sendto(ackpkt, serverAddress)
             data = clientSocket.recv(512)
-            ack, nextack, comando = udpextract(data)
+            ack, nextack, dataResponse = udpextract(data)
         #fim rdt3.0 receptor
-        print(f'{apresentacao} servidor: {dataResponse}')
+        if dataResponse == 'menu':
+            fim = 0
+            seqc = nextack
+            menuresponse = []
+            while fim != 1:
+                nxtack = createpkt('.', seqc, serverPort)
+                clientSocket.sendto(nxtack, serverAddress)
+                data = clientSocket.recvfrom(512)[0]
+                ack, nextack, dataResponse = udpextract(data)
+                if dataResponse == '#':
+                    fim = 1
+                    nxtack = createpkt('.', ack, serverPort)
+                    clientSocket.sendto(nxtack, serverAddress)
+                else:
+                    menuresponse.append(dataResponse)
+                    seqc = seqc + 1
+            print(f'{apresentacao} servidor: {menuresponse[0]}')
+            white = ''
+            for i in range(len(apresentacao)):
+                white = white + ' '
+            for op in menuresponse[1:]:
+                print(white, op)
+        if dataResponse == 'cardapio':
+            fim = 0
+            seqc = nextack
+            cardresponse = []
+            while fim != 1:
+                nxtack = createpkt('.', seqc, serverPort)
+                clientSocket.sendto(nxtack, serverAddress)
+                data = clientSocket.recvfrom(512)[0]
+                ack, nextack, dataResponse = udpextract(data)
+                if dataResponse == '#':
+                    fim = 1
+                    nxtack = createpkt('.', seqc, serverPort)
+                    clientSocket.sendto(nxtack, serverAddress)
+                else:
+                    menuresponse.append(dataResponse)
+                    seqc = seqc + 1
+            print(f'{apresentacao} servidor: {menuresponse[0]}')
+            white = ''
+            for i in range(len(apresentacao)):
+                white = white + ' '
+            for op in menuresponse[1:]:
+                print(white, op)
+        else:
+            print(f'{apresentacao} servidor: {dataResponse}')
+
+
+
+
+
     seq = seq + 1
-    #nxtack = createpkt('.', nextack, serverPort)
+
     #clientSocket.sendto(nxtack, serverAddress)
 
 clientSocket.close()
