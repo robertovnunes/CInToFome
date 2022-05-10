@@ -58,6 +58,9 @@ def createPkt(msg, nextAck):
     }
     return pickle.dumps(pkt)
 
+# faz a checagem e montagem do pacote de resposta
+# se o ack foi correto, cria o pacote resposta com o mesmo ack, fazendo a confirmação de recebimento
+# se o ack está errado, cria o pacote resposta com o ack diferente, passando a mensagem de que o ack esperado não foi recebido 
 def checkPkt(pkt):
     if(checksum(pkt["msg"]) == pkt["head"]["checksum"]):
         replyPkt = {
@@ -89,9 +92,11 @@ def nextAck(actualAck):
     else:
         return 0;
 
+
+# recebe um socket e o ack que ele deve receber
 def waitConfirmation(socket, nextAck):
     start = time.time()
-    socket.settimeout(2.0)
+    socket.settimeout(2.0) #inicia o temporizador
     times = 1
     
     while True:
@@ -100,21 +105,22 @@ def waitConfirmation(socket, nextAck):
             reply, senderAddress = socket.recvfrom(2048)
             reply = pickle.loads(reply)
             # print(reply)
-            if reply["head"]["ack"] == nextAck:
+            if reply["head"]["ack"] == nextAck: #se o ack recebido é o correto, atualiza para o próximo
                 if nextAck == 0:
                     nextAck = 1
                 else:
                     nextAck = 0
                 break
             else:
-                print("ack incorreto!")
+                print("ack incorreto!") #se o ack foi incorreto, reconfigura o timeout para o tempo restante
                 print(f"tempo restante: {socket.gettimeout() - (time.time() - start)}")
                 socket.settimeout(socket.gettimeout() - (time.time() - start))
-        except Exception as e: # Não consegui fazer com exceção de timeout
+        except Exception as e: # Se ocorrer a exceção de timeout, acrescenta o número de tentativas de reenvio
             if times > 4:
                 print(f"Esgotadas tentativas de reenvio")
                 break
             times += 1
             print(f"{times}ª tentativa de envio")
-    socket.settimeout(None)
-    return nextAck
+    
+    socket.settimeout(None) # para o timeout
+    return nextAck # retorna o próximo ack a ser recebido
